@@ -51,7 +51,7 @@ class TestSet < MiniTest::Test
     assert_equal true, set.contains?("4")
   end
 
-  def test_uniqueness
+  def test_ignores_duplicates
     @one.add("1")
 
     assert_equal 1, @one.size
