@@ -1,7 +1,7 @@
 require 'minitest/autorun'
 require_relative 'set'
 
-class TestSet < MiniTest::Unit::TestCase
+class TestSet < MiniTest::Test
   def setup
     @empty = Set.new
     @one = Set.new
@@ -13,28 +13,29 @@ class TestSet < MiniTest::Unit::TestCase
   end
 
   def test_emptiness
-    assert @empty.empty? == true
-    assert @one.empty? == false
-    assert @many.empty? == false
+    assert_equal true,  @empty.empty?
+    assert_equal false, @one.empty?
+    assert_equal false, @many.empty?
   end
 
   def test_size
-    assert @empty.size == 0
-    assert @one.size == 1
-    assert @many.size > 1 
+    assert_equal 0, @empty.size
+    assert_equal 1, @one.size
+    assert_equal true, @many.size > 1
   end
 
   def test_contains
-    assert @empty.contains?("1") == false
-    assert @empty.contains?("2") == false
-    assert @one.contains?("1") == true
-    assert @one.contains?("2") == false
-    assert @many.contains?("1") == true
-    assert @many.contains?("2") == true
+    assert_equal false, @empty.contains?("1")
+    assert_equal false, @empty.contains?("2")
+    assert_equal true, @one.contains?("1")
+    assert_equal false, @one.contains?("2")
+    assert_equal true, @many.contains?("1")
+    assert_equal true, @many.contains?("2")
   end
 
   def test_remove
     set = Set.new
+
     set.add("1")
     set.add("2")
     set.add("3")
@@ -43,18 +44,17 @@ class TestSet < MiniTest::Unit::TestCase
     set.remove("2")
     set.remove("not in the set")
 
-    assert set.size == 3
-    assert set.contains?("2") == false
-
-    assert set.contains?("1") == true
-    assert set.contains?("3") == true
-    assert set.contains?("4") == true
+    assert_equal 3, set.size
+    assert_equal false, set.contains?("2")
+    assert_equal true, set.contains?("1")
+    assert_equal true, set.contains?("3")
+    assert_equal true, set.contains?("4")
   end
 
-  def test_ignores_duplicates
+  def test_uniqueness
     @one.add("1")
 
-    assert @one.size == 1
+    assert_equal 1, @one.size
   end
 
   def test_grows_when_full
@@ -63,9 +63,9 @@ class TestSet < MiniTest::Unit::TestCase
     set.add("1")
     set.add("2")
 
-    assert set.size == 2
-    assert set.contains?("1")
-    assert set.contains?("2")
+    assert_equal 2, set.size
+    assert_equal true, set.contains?("1")
+    assert_equal true, set.contains?("2")
   end
 end
 

@@ -1,23 +1,22 @@
-class Set
-  
-  attr_reader :size
+require_relative 'array'
 
-  def initialize(capacity = 0)
+class Set
+
+  def initialize(capacity = 10)
     @size = 0
-    @capcity = capacity
-    @storage = Array.new(capacity)
+    @capacity = capacity
+    @storage = CArray.new(capacity)
   end
 
   def empty?
-    @size.zero?
+    @size == 0
   end
 
-  def add(object)
-    return if contains?(object)
+  def add(element)
+    return if contains?(element)
+    grow! if full?
 
-    grow if full?
-
-    @storage[@size] = object
+    @storage[@size] = element
     @size += 1
   end
 
@@ -25,28 +24,35 @@ class Set
     @size == @capacity
   end
 
-  def grow
-    @capacity = capacity * 2
-    bigger = Array.new(@capacity)
-    @storage.each { bigger << _1 }
+  def grow!
+    bigger = CArray.new(@size * 2)
+    for index in 0..@size do
+      bigger[index] = @storage[index]
+    end
+    @storage = bigger
   end
 
-  def index_of(object)
-    @size.times do |index|
-      return index if @storage[index].eql?(object)
+  def size
+    @size
+  end
+
+  def index_of?(element)
+    for index in 0..@size do
+      return index if @storage[index].eql?(element)
     end
 
-    -1
+    return -1
+
   end
 
-  def contains?(object)
-    return index_of(object) >= 0
+  def contains?(element)
+    index_of?(element) >= 0
   end
 
-  def remove(object)
-    index = index_of(object)
-    return if index < 0
+  def remove(element)
+    return unless contains?(element)
 
+    index = index_of?(element)
     @storage[index] = @storage[@size - 1]
     @storage[@size - 1] = nil
     @size -= 1
