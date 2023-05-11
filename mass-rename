@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+
+# Parse command line arguments
+if ARGV.length != 2
+  puts "Usage: ruby rename_files.rb 'file1_data_123.txt,file2_data_456.txt,file3_data_789.txt,file4_data_000.txt' 'file1_info_123.txt,file2_info_456.txt,file3_info_789.txt,file4_info_000.txt'"
+  exit(1)
+end
+
+actual = ARGV[0].split(",")
+desired = ARGV[1].split(",")
+
+if actual.size != desired.size
+  abort("Size of actual (#{actual.size}) and desired (#{desired.size}) are not the same. GET ME OUTTA HERE")
+end
+
+# Check for mismatches
+actual.zip(desired).each do |actual, desired|
+  actual_parts = actual.split("_")
+  desired_parts = desired.split("_")
+  if actual_parts[1] != desired_parts[1]
+    abort("Mismatch between data parts in #{actual} and #{desired}. Aborting rename process.")
+  end
+end
+
+# Rename files
+actual.zip(desired).each do |actual, desired|
+  File.rename(actual, desired)
+end
+
